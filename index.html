@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tome of Time - D&D World Clock & Combat Engine</title>
+    <title>D&D DM Screen - World Clock & Campaign Log</title>
     <style>
         :root {
-            --bg-dark: #0a0b10;
-            --panel-bg: #131722;
-            --panel-border: #2a3142;
-            --accent-gold: #d4af37;
-            --accent-red: #e64a19;
-            --accent-blue: #29b6f6;
-            --accent-purple: #ab47bc;
-            --text-main: #eceff1;
-            --text-muted: #90a4ae;
-            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --bg-dark: #0b0c10;
+            --panel-bg: #1f2833;
+            --panel-border: #45a29e;
+            --accent-gold: #c5a059;
+            --accent-green: #66fcf1;
+            --accent-red: #e63946;
+            --text-main: #edf5e1;
+            --text-muted: #c5c6c7;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --font-serif: 'Cinzel', 'Georgia', serif;
         }
 
@@ -33,49 +32,39 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden;
+            padding: 15px;
         }
 
         header {
-            background: linear-gradient(180deg, #181c28 0%, #0a0b10 100%);
+            background: #121820;
             border-bottom: 2px solid var(--accent-gold);
-            padding: 1rem 2rem;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            margin-bottom: 15px;
+            border-radius: 6px;
         }
 
         h1 {
             font-family: var(--font-serif);
             color: var(--accent-gold);
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .header-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .main-container {
+        .dm-layout {
             display: grid;
             grid-template-columns: 1fr 380px;
-            gap: 20px;
-            padding: 20px;
+            gap: 15px;
             flex: 1;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
         }
 
-        @media (max-width: 1100px) {
-            .main-container {
+        @media (max-width: 1024px) {
+            .dm-layout {
                 grid-template-columns: 1fr;
             }
         }
@@ -83,134 +72,117 @@
         .panel {
             background: var(--panel-bg);
             border: 1px solid var(--panel-border);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            position: relative;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .panel-header {
             font-family: var(--font-serif);
             color: var(--accent-gold);
-            border-bottom: 1px solid var(--panel-border);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border-bottom: 1px solid #324353;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
-        /* Canvas Displays */
-        .canvas-container {
-            position: relative;
-            width: 100%;
-            height: 320px;
-            background: #050608;
+        /* Digital Display & Stage */
+        .time-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--accent-green);
+            text-align: center;
+            background: #0b0c10;
+            padding: 12px;
             border-radius: 6px;
             border: 1px solid var(--panel-border);
-            overflow: hidden;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+        }
+
+        .stage-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #111;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+
+        /* Canvas Display */
+        .canvas-container {
+            width: 100%;
+            height: 240px;
+            background: #0b0c10;
+            border-radius: 6px;
+            border: 1px solid #324353;
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 10px;
         }
 
-        canvas {
-            display: block;
-        }
-
-        /* Controls Grid */
+        /* Buttons & Controls */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 10px;
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn {
-            background: #1e2433;
+            background: #121820;
             color: var(--text-main);
             border: 1px solid var(--panel-border);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-family: var(--font-main);
             font-weight: 600;
+            font-size: 0.85rem;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn:hover {
-            background: #2a3248;
-            border-color: var(--accent-gold);
+            background: #2c3e50;
+            border-color: var(--accent-green);
             color: #fff;
         }
 
         .btn-gold {
-            background: linear-gradient(135deg, #b8860b 0%, #d4af37 100%);
+            background: var(--accent-gold);
             color: #000;
             border: none;
         }
 
         .btn-gold:hover {
-            background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 100%);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            background: #e5c158;
         }
 
         .btn-red {
-            background: linear-gradient(135deg, #8b0000 0%, #e64a19 100%);
+            background: var(--accent-red);
             color: #fff;
             border: none;
         }
 
         .btn-red:hover {
-            background: linear-gradient(135deg, #e64a19 0%, #ff7043 100%);
-        }
-
-        .btn-purple {
-            background: linear-gradient(135deg, #4a148c 0%, #ab47bc 100%);
-            color: #fff;
-            border: none;
-        }
-
-        .btn-purple:hover {
-            background: linear-gradient(135deg, #ab47bc 0%, #ce93d8 100%);
-        }
-
-        /* Time Displays */
-        .time-readout {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: var(--accent-gold);
-            text-align: center;
-            margin: 10px 0;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-            background: #090b10;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #1a202c;
-        }
-
-        .stage-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: #1e2433;
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
+            background: #ff4d5e;
         }
 
         /* Tension Pool */
@@ -218,411 +190,225 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #090b10;
-            padding: 12px;
+            background: #0b0c10;
+            padding: 10px;
             border-radius: 6px;
-            border: 1px solid var(--panel-border);
+            border: 1px solid #324353;
             margin-top: 10px;
         }
 
         .dice-pool {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .die {
-            width: 32px;
-            height: 32px;
-            background: #1a202c;
-            border: 2px solid #3a445d;
-            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            background: #1f2833;
+            border: 2px solid #45a29e;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: var(--text-muted);
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .die.filled {
             background: var(--accent-red);
-            border-color: #ff7043;
+            border-color: #ff4d5e;
             color: #fff;
-            box-shadow: 0 0 8px rgba(230, 74, 25, 0.6);
-            animation: pulse 1.5s infinite alternate;
+            box-shadow: 0 0 6px rgba(230, 57, 70, 0.8);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
-        }
-
-        /* Form Inputs */
-        select, input, textarea {
-            background: #090b10;
-            border: 1px solid var(--panel-border);
-            color: var(--text-main);
-            padding: 8px 12px;
-            border-radius: 4px;
-            width: 100%;
-            font-family: var(--font-main);
-        }
-
-        select:focus, input:focus {
-            border-color: var(--accent-gold);
-            outline: none;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
+        /* Session Log */
+        .log-box {
+            background: #0b0c10;
+            border: 1px solid #324353;
+            border-radius: 6px;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        /* Active Effects List */
-        .effect-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 280px;
-            overflow-y: auto;
-            padding-right: 5px;
+            gap: 6px;
         }
 
-        .effect-card {
-            background: #181d2a;
-            border-left: 4px solid var(--accent-gold);
-            padding: 10px 12px;
-            border-radius: 0 6px 6px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
+        .log-entry {
+            border-bottom: 1px dotted #222;
+            padding-bottom: 4px;
+            line-height: 1.3;
         }
 
-        .effect-card.expired {
-            border-left-color: var(--accent-red);
-            background: #251317;
-        }
-
-        .effect-card .info h4 {
-            font-size: 0.95rem;
-            color: #fff;
-        }
-
-        .effect-card .info p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .effect-card .hp-accrued {
-            font-size: 0.85rem;
+        .log-entry .time {
+            color: var(--accent-gold);
             font-weight: bold;
-            color: #81c784;
         }
 
-        .effect-card .hp-accrued.dmg {
+        .log-entry.alert {
             color: #e57373;
         }
 
-        /* Modal Overlay */
+        /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8);
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+            opacity: 1; pointer-events: auto;
         }
 
         .modal {
             background: var(--panel-bg);
             border: 2px solid var(--accent-gold);
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-
-        .modal h2 {
-            font-family: var(--font-serif);
-            color: var(--accent-gold);
-            margin-bottom: 15px;
-        }
-
-        /* Lore Hazard Bar */
-        .lore-banner {
-            background: #1a1625;
-            border: 1px solid var(--accent-purple);
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .lore-icon {
-            font-size: 1.4rem;
+            border-radius: 8px; width: 90%; max-width: 450px;
+            padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.8);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1><span>⏳</span> Tome of Time: D&D Campaign Engine</h1>
-        <div class="header-controls">
-            <select id="regional-mode" style="width: auto;">
-                <option value="linear">Vael-Kesh (Linear Time)</option>
-                <option value="reversal">Yndoven (Sands of Reversal)</option>
-                <option value="echo">Caldrithil (Echo Wastes)</option>
-                <option value="jungle">Serrathai (Living Jungle)</option>
-            </select>
-            <button class="btn" id="sound-toggle">🔊 Audio: ON</button>
-        </div>
+        <h1><span>📜</span> DM Screen World Clock & Session Tracker</h1>
+        <button class="btn" id="sound-toggle">🔊 Sound: ON</button>
     </header>
 
-    <div class="main-container">
+    <div class="dm-layout">
         
-        <!-- Left / Central Column: Clocks & Mechanics -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Left Column: Clock & Mechanics -->
+        <div>
             
-            <!-- Main Celestial & World Clock Panel -->
+            <!-- World Clock & Dial -->
             <div class="panel">
                 <div class="panel-header">
-                    <span>Celestial Dial & Calendar</span>
+                    <span>Celestial Clock Dial</span>
                     <span id="stage-badge" class="stage-badge">Morning</span>
                 </div>
 
                 <div class="canvas-container">
-                    <canvas id="timeCanvas" width="600" height="320"></canvas>
+                    <canvas id="dialCanvas" width="500" height="240"></canvas>
                 </div>
 
-                <div class="time-readout" id="world-time-display">08:00:00 AM</div>
+                <div class="time-display" id="clock-display">08:00:00 AM</div>
 
-                <!-- Calendar Control Strip -->
-                <div class="grid-3" style="margin-bottom: 15px;">
+                <!-- Calendar Strip -->
+                <div class="grid-3" style="margin-bottom: 10px;">
                     <div>
-                        <label style="font-size: 0.75rem; color: var(--text-muted);">TENDAY (DAY 1-10)</label>
-                        <div style="display: flex; gap: 5px; align-items: center;">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">TENDAY (1-10)</span>
+                        <div style="display:flex; gap:5px; align-items:center;">
                             <button class="btn" id="prev-day">◀</button>
-                            <span id="day-display" style="flex: 1; text-align: center; font-weight: bold;">Day 1</span>
+                            <span id="day-display" style="flex:1; text-align:center; font-weight:bold;">Day 1</span>
                             <button class="btn" id="next-day">▶</button>
                         </div>
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; color: var(--text-muted);">MONTH (1-12)</label>
-                        <div style="display: flex; gap: 5px; align-items: center;">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">MONTH (1-12)</span>
+                        <div style="display:flex; gap:5px; align-items:center;">
                             <button class="btn" id="prev-month">◀</button>
-                            <span id="month-display" style="flex: 1; text-align: center; font-weight: bold;">M1 (Hammer)</span>
+                            <span id="month-display" style="flex:1; text-align:center; font-weight:bold;">M1</span>
                             <button class="btn" id="next-month">▶</button>
                         </div>
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; color: var(--text-muted);">SEASON & YEAR</label>
-                        <div style="text-align: center; font-weight: bold; padding-top: 8px;" id="season-year-display">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">SEASON & YEAR</span>
+                        <div style="text-align:center; font-weight:bold; padding-top:6px;" id="calendar-summary">
                             ❄️ Winter | 1492 DR
                         </div>
                     </div>
-                </div>
-
-                <!-- Dynamic Lore Ambient Prompt -->
-                <div class="lore-banner" id="lore-banner">
-                    <span class="lore-icon">📜</span>
-                    <span id="lore-text">Morning Sun: Phantom echoes quiet down. Standard encounters apply.</span>
                 </div>
             </div>
 
             <!-- Out-of-Combat Spent Time Track & Tension Pool -->
             <div class="panel">
                 <div class="panel-header">
-                    <span>Spent Time Track & Tension Pool (10m Segments)</span>
-                    <span style="font-size: 0.85rem; color: var(--text-muted);">60m = Tension Roll</span>
+                    <span>Out-of-Combat Spent Time (10m Segments)</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted);">60m = Tension Roll</span>
                 </div>
 
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
-                    Searching rooms, picking locks, casting rituals, or taking short breaks consumes 10-minute segments. Every segment adds 1d6 to the Tension Pool.
-                </p>
-
-                <div class="grid-3" style="margin-bottom: 15px;">
-                    <button class="btn" id="add-10m-search">🔍 +10m Search / Lockpick</button>
-                    <button class="btn" id="add-10m-ritual">📜 +10m Ritual Cast</button>
+                <div class="grid-3" style="margin-bottom: 10px;">
+                    <button class="btn" id="add-10m-search">🔍 +10m Search</button>
+                    <button class="btn" id="add-10m-ritual">📜 +10m Ritual</button>
                     <button class="btn" id="add-1h-rest">⛺ +1h Short Rest</button>
                 </div>
 
                 <div class="tension-container">
                     <div>
-                        <div style="font-weight: bold; font-size: 0.9rem;">TENSION POOL</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);" id="tension-count-text">0 / 6 Dice Accumulated</div>
+                        <div style="font-weight:bold; font-size:0.85rem;">TENSION POOL (d6)</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted);" id="tension-text">0 / 6 Dice Filled</div>
                     </div>
-                    <div class="dice-pool" id="dice-pool">
-                        <div class="die">1</div>
-                        <div class="die">2</div>
-                        <div class="die">3</div>
-                        <div class="die">4</div>
-                        <div class="die">5</div>
-                        <div class="die">6</div>
+                    <div class="dice-pool">
+                        <div class="die">1</div><div class="die">2</div><div class="die">3</div>
+                        <div class="die">4</div><div class="die">5</div><div class="die">6</div>
                     </div>
-                    <button class="btn btn-red" id="manual-tension-roll">🎲 Roll Pool</button>
+                    <button class="btn btn-red" id="manual-roll">🎲 Roll Pool</button>
                 </div>
             </div>
 
-            <!-- Combat Engine & Turn Pacing -->
+            <!-- Combat Engine (+6s) -->
             <div class="panel">
                 <div class="panel-header">
-                    <span>Combat Round Engine (+6s Mechanics)</span>
-                    <span style="font-size: 0.85rem; color: var(--accent-red);" id="combat-status">Combat Active</span>
+                    <span>Combat Round Engine (+6s Turns)</span>
+                    <span style="font-size:0.85rem; color:var(--accent-green);">Active</span>
                 </div>
 
-                <div class="grid-2" style="margin-bottom: 15px;">
-                    <div>
-                        <label style="font-size: 0.8rem; color: var(--text-muted);">ACTIVE COMBATANTS IN INITIATIVE</label>
-                        <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-                            <button class="btn" id="sub-combatant" style="padding: 6px 12px;">-</button>
-                            <span id="combatant-count" style="font-size: 1.2rem; font-weight: bold; min-width: 30px; text-align: center;">4</span>
-                            <button class="btn" id="add-combatant" style="padding: 6px 12px;">+</button>
-                            <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 5px;">Combatants</span>
-                        </div>
+                <div class="grid-2" style="margin-bottom: 10px;">
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <span style="font-size:0.85rem; color:var(--text-muted);">Combatants:</span>
+                        <button class="btn" id="sub-c">-</button>
+                        <span id="c-count" style="font-weight:bold; font-size:1.1rem;">4</span>
+                        <button class="btn" id="add-c">+</button>
                     </div>
-                    <div>
-                        <label style="font-size: 0.8rem; color: var(--text-muted);">CURRENT TURN & ROUND</label>
-                        <div style="font-size: 1.1rem; font-weight: bold; margin-top: 8px;">
-                            Turn <span id="current-turn" style="color: var(--accent-gold);">1</span>/<span id="total-turns">4</span> | Round <span id="current-round" style="color: var(--accent-blue);">1</span>
-                        </div>
+                    <div style="text-align:right; font-weight:bold;">
+                        Turn <span id="current-turn" style="color:var(--accent-gold);">1</span> | Round <span id="current-round" style="color:var(--accent-green);">1</span>
                     </div>
                 </div>
 
                 <div class="grid-2">
-                    <button class="btn btn-gold" id="btn-end-turn" style="padding: 14px; font-size: 1.05rem;">
-                        ⚔️ End Turn (+6s In-Game)
-                    </button>
-                    <button class="btn btn-purple" id="btn-next-round">
-                        🔄 Advance Full Round (+24s)
-                    </button>
+                    <button class="btn btn-gold" id="end-turn">⚔️ End Turn (+6s)</button>
+                    <button class="btn" id="end-round">🔄 Advance Round</button>
                 </div>
             </div>
 
         </div>
 
-        <!-- Right Column: Active Spells & Scheduled Event Clocks -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Right Column: Quick Modifiers & Campaign Session Log -->
+        <div>
             
-            <!-- Active Spells, Light Sources & Conditions -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span>Active Spells & Conditions</span>
-                </div>
-
-                <!-- Add Preset Form -->
-                <div class="form-group">
-                    <label>PRESET EFFECT / SPELL / LIGHT</label>
-                    <select id="preset-select">
-                        <option value="torch">🔥 Torch (1 hour)</option>
-                        <option value="lantern">💡 Bullseye Lantern (6 hours)</option>
-                        <option value="spirit_guardians">👼 Spirit Guardians (10 mins | 3d8 DMG/turn)</option>
-                        <option value="moonbeam">🌕 Moonbeam (1 min | 2d10 DMG/turn)</option>
-                        <option value="flaming_sphere">🔥 Flaming Sphere (1 min | 2d6 DMG/turn)</option>
-                        <option value="aura_vitality">💖 Aura of Vitality (1 min | 2d6 HEAL/turn)</option>
-                        <option value="poisoned">🧪 Poisoned Condition (1 min | 1d4 DMG/turn)</option>
-                        <option value="regeneration">🌿 Regeneration (1 hour | +10 HP/turn)</option>
-                        <option value="custom">✏️ Custom Tracker...</option>
-                    </select>
-                </div>
-
-                <div class="form-group grid-2">
-                    <div>
-                        <label>NAME</label>
-                        <input type="text" id="effect-name" value="Torch">
-                    </div>
-                    <div>
-                        <label>DURATION (MINS)</label>
-                        <input type="number" id="effect-duration" value="60">
-                    </div>
-                </div>
-
-                <div class="form-group grid-2">
-                    <div>
-                        <label>HP IMPACT / TURN</label>
-                        <input type="text" id="effect-hp" placeholder="e.g. 2d6 or -5" value="0">
-                    </div>
-                    <div style="display: flex; align-items: flex-end;">
-                        <button class="btn btn-gold" id="add-effect-btn" style="width: 100%;">+ Track Effect</button>
-                    </div>
-                </div>
-
-                <!-- Active Effects Tracker Container -->
-                <div class="effect-list" id="effect-list">
-                    <!-- Dynamic Effect Cards Go Here -->
-                </div>
-            </div>
-
-            <!-- Scheduled World Event Alarms -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span>Scheduled Event Clocks</span>
-                </div>
-
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
-                    Set target timestamps or countdowns for world occurrences (e.g., Guard Shifts, Portal Closures, Cult Progressions).
-                </p>
-
-                <div class="form-group">
-                    <label>EVENT LABEL</label>
-                    <input type="text" id="event-title" placeholder="e.g. Arcane Portal Collapses">
-                </div>
-
-                <div class="form-group grid-2">
-                    <div>
-                        <label>TRIGGER IN (MINUTES)</label>
-                        <input type="number" id="event-timer-mins" value="30">
-                    </div>
-                    <div style="display: flex; align-items: flex-end;">
-                        <button class="btn" id="add-event-btn" style="width: 100%;">⏰ Set Alarm</button>
-                    </div>
-                </div>
-
-                <div class="effect-list" id="event-list">
-                    <!-- Event Cards Go Here -->
-                </div>
-            </div>
-
             <!-- Quick Time Modifiers -->
             <div class="panel">
                 <div class="panel-header">
-                    <span>Manual Quick-Time Modifiers</span>
+                    <span>Quick Time Adjustments</span>
                 </div>
-                <div class="grid-3">
-                    <button class="btn" id="add-6s">+6 Seconds</button>
-                    <button class="btn" id="add-1m">+1 Minute</button>
-                    <button class="btn" id="add-1h">+1 Hour</button>
-                    <button class="btn" id="add-8h">+8 Hours</button>
-                    <button class="btn btn-red" id="add-24h">+24 Hours</button>
-                    <button class="btn" id="reset-clock">🔄 Reset</button>
+                <div class="grid-3" style="margin-bottom: 8px;">
+                    <button class="btn" id="mod-6s">+6s</button>
+                    <button class="btn" id="mod-1m">+1m</button>
+                    <button class="btn" id="mod-10m">+10m</button>
+                    <button class="btn" id="mod-1h">+1h</button>
+                    <button class="btn" id="mod-8h">+8h</button>
+                    <button class="btn btn-red" id="mod-reset">🔄 Reset</button>
+                </div>
+            </div>
+
+            <!-- Session & Campaign Activity Log -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>Campaign & Session Log</span>
+                    <button class="btn" id="clear-log" style="padding:2px 6px; font-size:0.75rem;">Clear</button>
+                </div>
+                <div class="log-box" id="session-log">
+                    <div class="log-entry">
+                        <span class="time">[08:00:00 AM]</span> Session started. Calendar set to Tenday 1, Month 1 (Hammer), 1492 DR.
+                    </div>
                 </div>
             </div>
 
@@ -630,613 +416,252 @@
 
     </div>
 
-    <!-- Expiration / Summary Modal -->
-    <div class="modal-overlay" id="summary-modal">
+    <!-- Alert Modal -->
+    <div class="modal-overlay" id="alert-modal">
         <div class="modal">
-            <h2 id="modal-title">⏳ Effect Expired / Event Triggered</h2>
-            <p id="modal-body" style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; color: var(--text-main);">
-                Summary contents go here...
-            </p>
-            <button class="btn btn-gold" id="modal-close-btn" style="width: 100%; padding: 12px;">
-                Acknowledge & Clear
-            </button>
+            <h2 id="modal-title" style="color:var(--accent-gold); font-family:var(--font-serif); margin-bottom:10px;">Alert</h2>
+            <p id="modal-body" style="font-size:0.9rem; line-height:1.4; margin-bottom:15px;"></p>
+            <button class="btn btn-gold" id="modal-close" style="width:100%;">Acknowledge</button>
         </div>
     </div>
 
     <script>
-        /* ==========================================================================
-           TOME OF TIME - CORE STATE ENGINE
-           ========================================================================== */
-        
         const STATE = {
-            // World Time tracking in total seconds elapsed from midnight (Day 1)
-            totalSeconds: 8 * 3600, // Starts at 8:00 AM
-            tenday: 1,              // Day 1 to 10
-            month: 1,               // Month 1 to 12
-            year: 1492,             // DR
-            
-            // Tension Pool
-            tensionDice: 0,         // 0 to 6
-            
-            // Combat Engine
+            totalSeconds: 8 * 3600, // 8:00 AM start
+            tenday: 1,
+            month: 1,
+            year: 1492,
+            tensionDice: 0,
             combatants: 4,
-            currentTurn: 1,
-            currentRound: 1,
-            
-            // Regional / Metaphysical Mode
-            regionMode: 'linear',   // 'linear', 'reversal', 'echo', 'jungle'
-            
-            // Audio
-            soundEnabled: true,
-            
-            // Active Trackers
-            effects: [],
-            events: []
+            turn: 1,
+            round: 1,
+            sound: true
         };
 
         const STAGES = [
-            { name: 'Late Night', start: 0, end: 4, color: '#283593', icon: '🌌', lore: 'Late Night: The veil thins. Undead and shadow entities gain power.' },
-            { name: 'Early Morning', start: 4, end: 8, color: '#ff8f00', icon: '🌅', lore: 'Early Morning: Dawn light breaks. Mourning phantoms recede into fog.' },
-            { name: 'Morning', start: 8, end: 12, color: '#29b6f6', icon: '☀️', lore: 'Morning: Bright sun. Standard encounters and clear navigation.' },
-            { name: 'Afternoon', start: 12, end: 16, color: '#f57c00', icon: '🌞', lore: 'Afternoon: Peak daylight. Heat and exhaustion risks in desert regions.' },
-            { name: 'Evening', start: 16, end: 20, color: '#d81b60', icon: '🌇', lore: 'Evening: Dusk falls. Light sources required; perception checks hindered.' },
-            { name: 'Night', start: 20, end: 24, color: '#4a148c', icon: '🌙', lore: 'Night: Deep darkness. Reverse-tongued oracles and nocturnal hunters roam.' }
+            { name: 'Late Night', start: 0, end: 4, color: '#3f51b5', icon: '🌌' },
+            { name: 'Early Morning', start: 4, end: 8, color: '#ff9800', icon: '🌅' },
+            { name: 'Morning', start: 8, end: 12, color: '#03a9f4', icon: '☀️' },
+            { name: 'Afternoon', start: 12, end: 16, color: '#ff5722', icon: '🌞' },
+            { name: 'Evening', start: 16, end: 20, color: '#e91e63', icon: '🌇' },
+            { name: 'Night', start: 20, end: 24, color: '#673ab7', icon: '🌙' }
         ];
 
-        const MONTH_NAMES = [
-            'Hammer', 'Alturiak', 'Ches', 'Tarsahk', 'Mirtul', 'Kythorn',
-            'Flamerule', 'Eleasis', 'Eleint', 'Marpenoth', 'Uktar', 'Nightal'
-        ];
+        const MONTHS = ['Hammer', 'Alturiak', 'Ches', 'Tarsahk', 'Mirtul', 'Kythorn', 'Flamerule', 'Eleasis', 'Eleint', 'Marpenoth', 'Uktar', 'Nightal'];
 
-        /* ==========================================================================
-           WEB AUDIO API - SOUND SYNTHESIZER
-           ========================================================================== */
-        const AudioEngine = {
-            ctx: null,
-            init() {
-                if (!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-            },
-            playTick() {
-                if (!STATE.soundEnabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.05);
-            },
-            playGong() {
-                if (!STATE.soundEnabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 1.5);
-                gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 1.5);
-            },
-            playAlarm() {
-                if (!STATE.soundEnabled) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(520, now);
-                osc.frequency.setValueAtTime(650, now + 0.2);
-                osc.frequency.setValueAtTime(520, now + 0.4);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(now + 0.8);
-            }
-        };
+        // Sound Effects
+        const AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq = 600, dur = 0.05) {
+            if (!STATE.sound) return;
+            const osc = AudioCtx.createOscillator();
+            const gain = AudioCtx.createGain();
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.05, AudioCtx.currentTime);
+            osc.connect(gain); gain.connect(AudioCtx.destination);
+            osc.start(); osc.stop(AudioCtx.currentTime + dur);
+        }
 
-        /* ==========================================================================
-           CELESTIAL DIAL CANVAS RENDERER
-           ========================================================================== */
-        const canvas = document.getElementById('timeCanvas');
+        // Logger
+        function logEvent(text, isAlert = false) {
+            const log = document.getElementById('session-log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${isAlert ? 'alert' : ''}`;
+            
+            const hours = Math.floor(STATE.totalSeconds / 3600);
+            const mins = Math.floor((STATE.totalSeconds % 3600) / 60);
+            const secs = Math.floor(STATE.totalSeconds % 60);
+            const displayHours = hours % 12 === 0 ? 12 : hours % 12;
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const timeStr = `[${String(displayHours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} ${ampm}]`;
+
+            entry.innerHTML = `<span class="time">${timeStr}</span> ${text}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Canvas Renderer
+        const canvas = document.getElementById('dialCanvas');
         const ctx = canvas.getContext('2d');
 
-        function renderCelestialDial() {
-            const w = canvas.width;
-            const h = canvas.height;
-            const cx = w / 2;
-            const cy = h / 2;
-            const radius = 120;
-
+        function drawDial() {
+            const w = canvas.width, h = canvas.height;
+            const cx = w / 2, cy = h / 2, r = 90;
             ctx.clearRect(0, 0, w, h);
 
-            // Calculate current stage background color glow
             const hour = (STATE.totalSeconds / 3600) % 24;
-            const stage = STAGES.find(s => hour >= s.start && hour < s.end) || STAGES[0];
 
-            // Outer Ring - 24 Hour Markers & Stages
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius + 15, 0, Math.PI * 2);
-            ctx.fillStyle = '#090b10';
-            ctx.fill();
-            ctx.strokeStyle = '#2a3142';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-
-            // Draw Stage Arcs
-            STAGES.forEach((s, idx) => {
-                const startAngle = ((s.start / 24) * Math.PI * 2) - (Math.PI / 2);
-                const endAngle = ((s.end / 24) * Math.PI * 2) - (Math.PI / 2);
-
+            // Stages Ring
+            STAGES.forEach(s => {
+                const sa = ((s.start / 24) * Math.PI * 2) - (Math.PI / 2);
+                const ea = ((s.end / 24) * Math.PI * 2) - (Math.PI / 2);
                 ctx.beginPath();
-                ctx.arc(cx, cy, radius + 8, startAngle, endAngle);
+                ctx.arc(cx, cy, r + 6, sa, ea);
                 ctx.strokeStyle = s.color;
-                ctx.lineWidth = 8;
+                ctx.lineWidth = 6;
                 ctx.stroke();
             });
 
-            // Hour Tick Marks
+            // Ticks
             for (let i = 0; i < 24; i++) {
-                const angle = ((i / 24) * Math.PI * 2) - (Math.PI / 2);
-                const x1 = cx + Math.cos(angle) * radius;
-                const y1 = cy + Math.sin(angle) * radius;
-                const x2 = cx + Math.cos(angle) * (radius - (i % 6 === 0 ? 12 : 6));
-                const y2 = cy + Math.sin(angle) * (radius - (i % 6 === 0 ? 12 : 6));
-
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.strokeStyle = i % 6 === 0 ? '#d4af37' : '#546e7a';
-                ctx.lineWidth = i % 6 === 0 ? 2 : 1;
-                ctx.stroke();
+                const a = ((i / 24) * Math.PI * 2) - (Math.PI / 2);
+                const x1 = cx + Math.cos(a) * r;
+                const y1 = cy + Math.sin(a) * r;
+                const x2 = cx + Math.cos(a) * (r - (i % 6 === 0 ? 10 : 5));
+                const y2 = cy + Math.sin(a) * (r - (i % 6 === 0 ? 10 : 5));
+                ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+                ctx.strokeStyle = i % 6 === 0 ? '#c5a059' : '#555';
+                ctx.lineWidth = i % 6 === 0 ? 2 : 1; ctx.stroke();
             }
 
-            // Central Sun / Moon Rotating Disk
-            const hourAngle = ((hour / 24) * Math.PI * 2) - (Math.PI / 2);
-            
-            // Draw Sun or Moon Pointer
-            const handX = cx + Math.cos(hourAngle) * (radius - 25);
-            const handY = cy + Math.sin(hourAngle) * (radius - 25);
+            // Hand
+            const ha = ((hour / 24) * Math.PI * 2) - (Math.PI / 2);
+            const hx = cx + Math.cos(ha) * (r - 20);
+            const hy = cy + Math.sin(ha) * (r - 20);
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(hx, hy);
+            ctx.strokeStyle = '#c5a059'; ctx.lineWidth = 3; ctx.stroke();
 
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(handX, handY);
-            ctx.strokeStyle = '#d4af37';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            // Orb Head
-            ctx.beginPath();
-            ctx.arc(handX, handY, 12, 0, Math.PI * 2);
+            // Orb
+            ctx.beginPath(); ctx.arc(hx, hy, 8, 0, Math.PI * 2);
             ctx.fillStyle = (hour >= 6 && hour < 18) ? '#ffb300' : '#81d4fa';
-            ctx.fill();
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Center Hub
-            ctx.beginPath();
-            ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-            ctx.fillStyle = '#d4af37';
-            ctx.fill();
+            ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
         }
 
-        /* ==========================================================================
-           CORE TIME ENGINE & TIME ADVANCEMENT MECHANICS
-           ========================================================================== */
-        
-        function advanceTime(secondsToAdd, isCombat = false) {
-            // Metaphysical Region Modifiers
-            if (STATE.regionMode === 'reversal') {
-                const hour = (STATE.totalSeconds / 3600) % 24;
-                if (hour >= 20 || hour < 4) {
-                    // Sands of Reversal: Time ticks BACKWARDS at night
-                    secondsToAdd = -secondsToAdd;
-                }
-            }
-
-            STATE.totalSeconds += secondsToAdd;
-            if (STATE.totalSeconds < 0) STATE.totalSeconds += 86400; // Floor boundary
-
-            // Handle Day Rollovers
+        // Time Engine
+        function advance(seconds, label = '') {
+            STATE.totalSeconds += seconds;
             if (STATE.totalSeconds >= 86400) {
                 STATE.totalSeconds -= 86400;
                 STATE.tenday++;
                 if (STATE.tenday > 10) {
-                    STATE.tenday = 1;
-                    STATE.month++;
-                    if (STATE.month > 12) {
-                        STATE.month = 1;
-                        STATE.year++;
-                    }
+                    STATE.tenday = 1; STATE.month++;
+                    if (STATE.month > 12) { STATE.month = 1; STATE.year++; }
                 }
+                logEvent(`🌅 Day Rollover! Now Tenday ${STATE.tenday}, Month ${STATE.month} (${MONTHS[STATE.month-1]}).`);
             }
-
-            AudioEngine.playTick();
-            updateTrackers(secondsToAdd);
+            playBeep();
+            if (label) logEvent(label);
             renderUI();
         }
 
-        function updateTrackers(secondsAdded) {
-            const minutesAdded = secondsAdded / 60;
-
-            // 1. Update Active Spells & Conditions
-            STATE.effects.forEach(eff => {
-                if (eff.remainingMins > 0) {
-                    eff.remainingMins -= minutesAdded;
-                    if (eff.remainingMins < 0) eff.remainingMins = 0;
-
-                    // Accrue HP damage/healing if combat or turn-based
-                    if (eff.hpPerTurn !== 0 && minutesAdded > 0) {
-                        const turnsElapsed = Math.max(1, Math.floor(secondsAdded / 6));
-                        eff.accruedHP += (eff.hpPerTurn * turnsElapsed);
-                    }
-
-                    if (eff.remainingMins === 0 && !eff.expiredAlerted) {
-                        eff.expiredAlerted = true;
-                        triggerModal(`⏳ Effect Expired: ${eff.name}`, 
-                            `The duration for <b>${eff.name}</b> has ended!<br><br>` +
-                            `<b>Total Accumulated HP Impact:</b> <span style="color:${eff.accruedHP >= 0 ? '#81c784' : '#e57373'}">${eff.accruedHP >= 0 ? '+' : ''}${eff.accruedHP} HP</span><br>` +
-                            `Please resolve any final damage/healing before clearing.`
-                        );
-                        AudioEngine.playAlarm();
-                    }
-                }
-            });
-
-            // 2. Update Scheduled Event Alarms
-            STATE.events.forEach(evt => {
-                if (evt.remainingMins > 0) {
-                    evt.remainingMins -= minutesAdded;
-                    if (evt.remainingMins <= 0) {
-                        evt.remainingMins = 0;
-                        if (!evt.triggered) {
-                            evt.triggered = true;
-                            triggerModal(`⏰ Scheduled Event Triggered!`, 
-                                `<b>Event:</b> ${evt.title}<br><br>` +
-                                `The scheduled clock time for this world occurrence has been reached.`
-                            );
-                            AudioEngine.playGong();
-                        }
-                    }
-                }
-            });
-        }
-
-        /* ==========================================================================
-           TENSION POOL & SPENT TIME TRACK (6d6 SYSTEM)
-           ========================================================================== */
-        
-        function addTensionDie() {
+        function addTension() {
             STATE.tensionDice++;
+            logEvent(`🎲 Added 1d6 to Tension Pool (${STATE.tensionDice}/6).`);
             if (STATE.tensionDice >= 6) {
-                triggerTensionRoll();
+                rollTension();
             } else {
                 renderUI();
             }
         }
 
-        function triggerTensionRoll() {
-            STATE.tensionDice = 6;
-            renderUI();
-
-            // Simulate rolling 6d6
-            let diceResults = [];
-            let onesRolled = 0;
-
+        function rollTension() {
+            STATE.tensionDice = 6; renderUI();
+            let rolls = [], ones = 0;
             for (let i = 0; i < 6; i++) {
-                const roll = Math.floor(Math.random() * 6) + 1;
-                diceResults.push(roll);
-                if (roll === 1) onesRolled++;
+                const r = Math.floor(Math.random() * 6) + 1;
+                rolls.push(r); if (r === 1) ones++;
             }
-
-            AudioEngine.playGong();
-
-            let outcomeText = `<b>Dice Rolled:</b> [ ${diceResults.join(', ')} ]<br><br>`;
-            if (onesRolled > 0) {
-                outcomeText += `<span style="color: #e57373; font-weight: bold;">🚨 BAD STUFF HAPPENS! (${onesRolled} One(s) Rolled)</span><br>` +
-                               `A random encounter, hazard, or wandering threat activates in the area!`;
+            playBeep(300, 0.3);
+            let msg = `Rolled: [ ${rolls.join(', ')} ]<br><br>`;
+            if (ones > 0) {
+                msg += `<b style="color:#e63946;">🚨 BAD STUFF HAPPENS! (${ones} One(s) Rolled)</b><br>A hazard, encounter, or threat triggers!`;
+                logEvent(`🚨 Tension Roll: [ ${rolls.join(', ')} ] -> BAD STUFF HAPPENS! (${ones} ones)`, true);
             } else {
-                outcomeText += `<span style="color: #81c784; font-weight: bold;">🛡️ Area Clear!</span><br>` +
-                               `No 1s were rolled. The party spent time safely... for now.`;
+                msg += `<b style="color:#66fcf1;">🛡️ Area Clear!</b><br>No 1s were rolled. The party remains safe for now.`;
+                logEvent(`🎲 Tension Roll: [ ${rolls.join(', ')} ] -> Safe.`);
             }
-
-            triggerModal(`🎲 Tension Pool Test (6d6)`, outcomeText);
-
-            // Reset pool after roll
-            STATE.tensionDice = 0;
-            renderUI();
+            showModal('Tension Pool Test (6d6)', msg);
+            STATE.tensionDice = 0; renderUI();
         }
 
-        /* ==========================================================================
-           UI RENDERER & DATA BINDING
-           ========================================================================== */
-        
         function renderUI() {
-            // 1. Digital Time & Stage
-            const hours = Math.floor(STATE.totalSeconds / 3600);
-            const mins = Math.floor((STATE.totalSeconds % 3600) / 60);
-            const secs = Math.floor(STATE.totalSeconds % 60);
+            const h = Math.floor(STATE.totalSeconds / 3600);
+            const m = Math.floor((STATE.totalSeconds % 3600) / 60);
+            const s = Math.floor(STATE.totalSeconds % 60);
+            const dh = h % 12 === 0 ? 12 : h % 12;
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            document.getElementById('clock-display').innerText = `${String(dh).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
 
-            const displayHours = hours % 12 === 0 ? 12 : hours % 12;
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const timeStr = `${String(displayHours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} ${ampm}`;
+            const stage = STAGES.find(st => h >= st.start && h < st.end) || STAGES[0];
+            const badge = document.getElementById('stage-badge');
+            badge.innerText = `${stage.icon} ${stage.name}`;
+            badge.style.borderColor = stage.color; badge.style.color = stage.color;
 
-            document.getElementById('world-time-display').innerText = timeStr;
-
-            // Current Stage
-            const stage = STAGES.find(s => hours >= s.start && hours < s.end) || STAGES[0];
-            const stageBadge = document.getElementById('stage-badge');
-            stageBadge.innerText = `${stage.icon} ${stage.name}`;
-            stageBadge.style.borderColor = stage.color;
-            stageBadge.style.color = stage.color;
-
-            document.getElementById('lore-text').innerText = stage.lore;
-
-            // Calendar
             document.getElementById('day-display').innerText = `Day ${STATE.tenday}`;
-            document.getElementById('month-display').innerText = `M${STATE.month} (${MONTH_NAMES[STATE.month - 1]})`;
-
-            const seasonIndex = Math.floor((STATE.month - 1) / 3);
+            document.getElementById('month-display').innerText = `M${STATE.month} (${MONTHS[STATE.month-1]})`;
+            const sIdx = Math.floor((STATE.month - 1) / 3);
             const seasons = ['❄️ Winter', '🌱 Spring', '☀️ Summer', '🍂 Fall'];
-            document.getElementById('season-year-display').innerText = `${seasons[seasonIndex]} | ${STATE.year} DR`;
+            document.getElementById('calendar-summary').innerText = `${seasons[sIdx]} | ${STATE.year} DR`;
 
-            // 2. Tension Pool Dice
-            const dieElements = document.querySelectorAll('.die');
-            dieElements.forEach((el, idx) => {
-                if (idx < STATE.tensionDice) {
-                    el.classList.add('filled');
-                } else {
-                    el.classList.remove('filled');
-                }
+            const dice = document.querySelectorAll('.die');
+            dice.forEach((d, i) => {
+                if (i < STATE.tensionDice) d.classList.add('filled');
+                else d.classList.remove('filled');
             });
-            document.getElementById('tension-count-text').innerText = `${STATE.tensionDice} / 6 Dice Accumulated`;
+            document.getElementById('tension-text').innerText = `${STATE.tensionDice} / 6 Dice Filled`;
 
-            // 3. Combat Engine Status
-            document.getElementById('combatant-count').innerText = STATE.combatants;
-            document.getElementById('current-turn').innerText = STATE.currentTurn;
-            document.getElementById('total-turns').innerText = STATE.combatants;
-            document.getElementById('current-round').innerText = STATE.currentRound;
+            document.getElementById('c-count').innerText = STATE.combatants;
+            document.getElementById('current-turn').innerText = STATE.turn;
+            document.getElementById('current-round').innerText = STATE.round;
 
-            // 4. Render Active Effects List
-            const effectContainer = document.getElementById('effect-list');
-            effectContainer.innerHTML = '';
-
-            STATE.effects.forEach((eff, idx) => {
-                const card = document.createElement('div');
-                card.className = `effect-card ${eff.remainingMins === 0 ? 'expired' : ''}`;
-                
-                const minsLeft = Math.ceil(eff.remainingMins);
-                card.innerHTML = `
-                    <div class="info">
-                        <h4>${eff.name} ${eff.remainingMins === 0 ? '⚠️ (EXPIRED)' : ''}</h4>
-                        <p>Remaining: ${minsLeft} mins | HP Impact: <span class="hp-accrued ${eff.accruedHP < 0 ? 'dmg' : ''}">${eff.accruedHP >= 0 ? '+' : ''}${eff.accruedHP} HP</span></p>
-                    </div>
-                    <button class="btn btn-red" onclick="removeEffect(${idx})" style="padding: 4px 8px; font-size: 0.75rem;">Clear</button>
-                `;
-                effectContainer.appendChild(card);
-            });
-
-            // 5. Render Scheduled Events List
-            const eventContainer = document.getElementById('event-list');
-            eventContainer.innerHTML = '';
-
-            STATE.events.forEach((evt, idx) => {
-                const card = document.createElement('div');
-                card.className = `effect-card ${evt.triggered ? 'expired' : ''}`;
-                
-                const minsLeft = Math.ceil(evt.remainingMins);
-                card.innerHTML = `
-                    <div class="info">
-                        <h4>${evt.title}</h4>
-                        <p>${evt.triggered ? '⏰ TRIGGERED' : `Triggers in: ${minsLeft} mins`}</p>
-                    </div>
-                    <button class="btn btn-red" onclick="removeEvent(${idx})" style="padding: 4px 8px; font-size: 0.75rem;">Clear</button>
-                `;
-                eventContainer.appendChild(card);
-            });
-
-            // Re-render Canvas
-            renderCelestialDial();
+            drawDial();
         }
 
-        /* ==========================================================================
-           MODAL DIALOG ENGINE
-           ========================================================================== */
-        function triggerModal(title, bodyHTML) {
+        function showModal(title, body) {
             document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-body').innerHTML = bodyHTML;
-            document.getElementById('summary-modal').classList.add('active');
+            document.getElementById('modal-body').innerHTML = body;
+            document.getElementById('alert-modal').classList.add('active');
         }
 
-        document.getElementById('modal-close-btn').addEventListener('click', () => {
-            document.getElementById('summary-modal').classList.remove('active');
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('alert-modal').classList.remove('active');
         });
 
-        /* ==========================================================================
-           EVENT LISTENERS & CONTROL BINDINGS
-           ========================================================================== */
+        // Event Listeners
+        document.getElementById('add-10m-search').addEventListener('click', () => { advance(600, 'Search/Lockpick (+10m)'); addTension(); });
+        document.getElementById('add-10m-ritual').addEventListener('click', () => { advance(600, 'Ritual Casting (+10m)'); addTension(); });
+        document.getElementById('add-1h-rest').addEventListener('click', () => { advance(3600, 'Short Rest (+1h)'); for(let i=0; i<6; i++) addTension(); });
+        document.getElementById('manual-roll').addEventListener('click', rollTension);
 
-        // Out-of-Combat Spent Time Track Buttons
-        document.getElementById('add-10m-search').addEventListener('click', () => {
-            advanceTime(600);
-            addTensionDie();
+        document.getElementById('add-c').addEventListener('click', () => { STATE.combatants++; renderUI(); });
+        document.getElementById('sub-c').addEventListener('click', () => { if (STATE.combatants > 1) { STATE.combatants--; renderUI(); } });
+        document.getElementById('end-turn').addEventListener('click', () => {
+            advance(6, `Turn ${STATE.turn} ended (+6s)`);
+            STATE.turn++;
+            if (STATE.turn > STATE.combatants) { STATE.turn = 1; STATE.round++; }
+            renderUI();
         });
-
-        document.getElementById('add-10m-ritual').addEventListener('click', () => {
-            advanceTime(600);
-            addTensionDie();
-        });
-
-        document.getElementById('add-1h-rest').addEventListener('click', () => {
-            advanceTime(3600);
-            // 1 hour rest adds tension
-            for (let i = 0; i < 6; i++) addTensionDie();
-        });
-
-        document.getElementById('manual-tension-roll').addEventListener('click', triggerTensionRoll);
-
-        // Combat Engine Controls
-        document.getElementById('add-combatant').addEventListener('click', () => {
-            STATE.combatants++;
+        document.getElementById('end-round').addEventListener('click', () => {
+            advance(STATE.combatants * 6, `Round ${STATE.round} complete (+${STATE.combatants * 6}s)`);
+            STATE.turn = 1; STATE.round++;
             renderUI();
         });
 
-        document.getElementById('sub-combatant').addEventListener('click', () => {
-            if (STATE.combatants > 1) {
-                STATE.combatants--;
-                if (STATE.currentTurn > STATE.combatants) STATE.currentTurn = 1;
-                renderUI();
-            }
-        });
-
-        document.getElementById('btn-end-turn').addEventListener('click', () => {
-            advanceTime(6, true); // +6s per turn
-            STATE.currentTurn++;
-            if (STATE.currentTurn > STATE.combatants) {
-                STATE.currentTurn = 1;
-                STATE.currentRound++;
-            }
+        document.getElementById('mod-6s').addEventListener('click', () => advance(6, '+6s Quick Add'));
+        document.getElementById('mod-1m').addEventListener('click', () => advance(60, '+1m Quick Add'));
+        document.getElementById('mod-10m').addEventListener('click', () => advance(600, '+10m Quick Add'));
+        document.getElementById('mod-1h').addEventListener('click', () => advance(3600, '+1h Quick Add'));
+        document.getElementById('mod-8h').addEventListener('click', () => advance(28800, '+8h Long Rest'));
+        document.getElementById('mod-reset').addEventListener('click', () => {
+            STATE.totalSeconds = 8 * 3600; STATE.tenday = 1; STATE.month = 1; STATE.year = 1492;
+            STATE.tensionDice = 0; STATE.turn = 1; STATE.round = 1;
+            logEvent('🔄 Clock reset to initial state.');
             renderUI();
         });
 
-        document.getElementById('btn-next-round').addEventListener('click', () => {
-            const roundSeconds = STATE.combatants * 6;
-            advanceTime(roundSeconds, true);
-            STATE.currentTurn = 1;
-            STATE.currentRound++;
-            renderUI();
+        document.getElementById('next-day').addEventListener('click', () => { STATE.tenday = (STATE.tenday % 10) + 1; renderUI(); });
+        document.getElementById('prev-day').addEventListener('click', () => { STATE.tenday = STATE.tenday === 1 ? 10 : STATE.tenday - 1; renderUI(); });
+        document.getElementById('next-month').addEventListener('click', () => { STATE.month = (STATE.month % 12) + 1; renderUI(); });
+        document.getElementById('prev-month').addEventListener('click', () => { STATE.month = STATE.month === 1 ? 12 : STATE.month - 1; renderUI(); });
+
+        document.getElementById('clear-log').addEventListener('click', () => {
+            document.getElementById('session-log').innerHTML = '';
         });
 
-        // Quick-Time Modifiers
-        document.getElementById('add-6s').addEventListener('click', () => advanceTime(6));
-        document.getElementById('add-1m').addEventListener('click', () => advanceTime(60));
-        document.getElementById('add-1h').addEventListener('click', () => advanceTime(3600));
-        document.getElementById('add-8h').addEventListener('click', () => advanceTime(28800));
-        document.getElementById('add-24h').addEventListener('click', () => advanceTime(86400));
-
-        document.getElementById('reset-clock').addEventListener('click', () => {
-            STATE.totalSeconds = 8 * 3600;
-            STATE.tenday = 1;
-            STATE.month = 1;
-            STATE.year = 1492;
-            STATE.tensionDice = 0;
-            STATE.currentTurn = 1;
-            STATE.currentRound = 1;
-            renderUI();
-        });
-
-        // Calendar Steppers
-        document.getElementById('next-day').addEventListener('click', () => {
-            STATE.tenday = (STATE.tenday % 10) + 1;
-            renderUI();
-        });
-        document.getElementById('prev-day').addEventListener('click', () => {
-            STATE.tenday = STATE.tenday === 1 ? 10 : STATE.tenday - 1;
-            renderUI();
-        });
-
-        document.getElementById('next-month').addEventListener('click', () => {
-            STATE.month = (STATE.month % 12) + 1;
-            renderUI();
-        });
-        document.getElementById('prev-month').addEventListener('click', () => {
-            STATE.month = STATE.month === 1 ? 12 : STATE.month - 1;
-            renderUI();
-        });
-
-        // Add Active Effect Preset Handling
-        document.getElementById('preset-select').addEventListener('change', (e) => {
-            const val = e.target.value;
-            const nameInput = document.getElementById('effect-name');
-            const durInput = document.getElementById('effect-duration');
-            const hpInput = document.getElementById('effect-hp');
-
-            switch(val) {
-                case 'torch':
-                    nameInput.value = '🔥 Torch'; durInput.value = '60'; hpInput.value = '0'; break;
-                case 'lantern':
-                    nameInput.value = '💡 Bullseye Lantern'; durInput.value = '360'; hpInput.value = '0'; break;
-                case 'spirit_guardians':
-                    nameInput.value = '👼 Spirit Guardians'; durInput.value = '10'; hpInput.value = '-14'; break;
-                case 'moonbeam':
-                    nameInput.value = '🌕 Moonbeam'; durInput.value = '1'; hpInput.value = '-11'; break;
-                case 'flaming_sphere':
-                    nameInput.value = '🔥 Flaming Sphere'; durInput.value = '1'; hpInput.value = '-7'; break;
-                case 'aura_vitality':
-                    nameInput.value = '💖 Aura of Vitality'; durInput.value = '1'; hpInput.value = '+7'; break;
-                case 'poisoned':
-                    nameInput.value = '🧪 Poisoned Condition'; durInput.value = '1'; hpInput.value = '-2'; break;
-                case 'regeneration':
-                    nameInput.value = '🌿 Regeneration'; durInput.value = '60'; hpInput.value = '+10'; break;
-            }
-        });
-
-        document.getElementById('add-effect-btn').addEventListener('click', () => {
-            const name = document.getElementById('effect-name').value || 'Custom Effect';
-            const dur = parseFloat(document.getElementById('effect-duration').value) || 10;
-            const hpVal = parseFloat(document.getElementById('effect-hp').value) || 0;
-
-            STATE.effects.push({
-                name: name,
-                durationMins: dur,
-                remainingMins: dur,
-                hpPerTurn: hpVal,
-                accruedHP: 0,
-                expiredAlerted: false
-            });
-
-            renderUI();
-        });
-
-        window.removeEffect = function(idx) {
-            STATE.effects.splice(idx, 1);
-            renderUI();
-        };
-
-        // Scheduled Events
-        document.getElementById('add-event-btn').addEventListener('click', () => {
-            const title = document.getElementById('event-title').value || 'World Event';
-            const mins = parseFloat(document.getElementById('event-timer-mins').value) || 30;
-
-            STATE.events.push({
-                title: title,
-                remainingMins: mins,
-                triggered: false
-            });
-
-            renderUI();
-        });
-
-        window.removeEvent = function(idx) {
-            STATE.events.splice(idx, 1);
-            renderUI();
-        };
-
-        // Regional Mode
-        document.getElementById('regional-mode').addEventListener('change', (e) => {
-            STATE.regionMode = e.target.value;
-            renderUI();
-        });
-
-        // Audio Toggle
         document.getElementById('sound-toggle').addEventListener('click', (e) => {
-            STATE.soundEnabled = !STATE.soundEnabled;
-            e.target.innerText = STATE.soundEnabled ? '🔊 Audio: ON' : '🔇 Audio: OFF';
+            STATE.sound = !STATE.sound;
+            e.target.innerText = STATE.sound ? '🔊 Sound: ON' : '🔇 Sound: OFF';
         });
 
-        // Initial Render 
         renderUI();
     </script>
 </body>
